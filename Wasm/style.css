@@ -1,0 +1,160 @@
+:root {
+	--wgreen: #3cba54;
+	--wyellow: #f4c20d;
+	--wred: #db3236;
+	--wblue: #4885ed;
+   --bg: black;
+   --fg: white;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html, body {
+	font-size: 18pt;
+    height: 100%;
+    font-family: monospace;
+    background-color: var(--bg);
+    color: var(--fg);
+    overflow: hidden;
+}
+
+#left-panel {
+	width: calc(35% - 4px);
+	height: 100%;
+	float: left;
+}
+
+.option {
+	width: calc(25% - 4px);
+	height: calc(5% - 4px);
+	float: left;
+	background-color: var(--bg);
+	cursor: pointer;
+	color: var(--fg);
+	text-align: center;
+	font-size: 3vh;
+	font-family: monospace;
+	border: 2px solid var(--fg);
+}
+
+#editor {
+    width: calc(100% - 4px);
+    height: calc(100% - 4px);
+    border: 2px solid var(--fg);
+    float: left;
+}
+
+#menu {
+    width: 15%;
+    height: calc(100% - 4px);
+    border: 2px solid var(--fg);
+    float: left;
+}
+
+#registers {
+	width: 100%;
+    height: 28%;
+    border: 2px solid var(--fg);
+	border-collapse: collapse;
+	table-layout: fixed;
+}
+
+#registers td {
+	font-weight: bold;
+	font-size: 1.8vw;
+}
+
+#cpu, #help {
+    width: calc(50%);
+    height: 100%;
+    border: 2px solid var(--fg);
+    color: var(--fg);
+    float: right;
+	border-collapse: collapse;
+	table-layout: fixed;
+}
+
+#help-info {
+	font-size: 1.3vw;
+}
+
+#help-button {
+	background-color: var(--wgreen);
+	user-select: none;
+	cursor: pointer;
+   font-weight: bold;
+}
+
+.help-coloumn {
+	float: left; 
+	width: calc(100% / 3 - 2px); 
+	height: 100%; 
+	overflow-y: hidden;
+	overflow-x: hidden;
+}
+
+.menu-button {
+	width: 100%;
+	height: 18%;
+	border: 2px solid var(--fg);
+	text-align: center;
+	font-size: 5vmin;
+    font-family: monospace;
+    background-color: var(--bg);
+    color: var(--fg);
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.cell {
+   border: 2px solid var(--fg);
+   width: calc(100% / 9);
+   text-align: center;
+   font-size: 2vmin;
+}
+
+.description {
+	font-size: 1vw;
+}
+
+.data-mov .arithmetic .control .bitwise {
+	font-size: 2vw;
+}
+
+.data-mov {
+	color: var(--wblue);
+}
+
+.arithmetic {
+	color: var(--wred);
+}
+
+.control {
+	color: var(--wyellow);
+}
+
+.bitwise {
+	color: var(--wgreen);
+}
+
+hr {
+	border-color: var(--fg);
+}
+
+
+#PC_Cursor {
+	background-color: var(--wblue);
+}
+
+#SP_Cursor {
+	background-color: var(--wyellow);
+}
+
+.active-line {
+  position:absolute;
+  background:rgba(100,200,100,0.5);
+  z-index:20
+}

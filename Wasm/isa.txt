@@ -1,0 +1,128 @@
+Instruction set for Weston Assembly
+
+Assembler directives:
+   Directive   |  Meaning
+   ------------+------------------------------
+   .byte	   |  Define a byte
+   .define	   |  Define a constant
+   .org		   |  Set the address
+   ;		   |  Starts a single line comment
+
+8-bit Registers:
+   Somewhat General Purpose Registers:
+	  - A   Accumulator
+	  - B	Counter
+	  - C
+	  - D
+   Special Registers:
+	  - F   Flag register
+	  - I   Instruction register
+	  - PC  Program counter
+	  - SP  Stack Pointer
+
+Instructions:
+   Instruction	  |  Operands			  |  Effect					 |	Bit pattern
+   ---------------+-----------------------+--------------------------+--------------
+   LD dest,src	  |  dest = register	  |  Loads the data in dest	 |	11DDDSSS
+				  |	 src  = register	  |  into src				 |	
+   ---------------+-----------------------+--------------------------+--------------
+   LD (dest),src  |	 dest = register	  |	 Loads data into memory	 |	010DDDSS
+				  |	 src  = GP register	  |	 at the address in dest	 |
+   ---------------+-----------------------+--------------------------+--------------
+   LD dest,(src)  |	 dest = GP register	  |	 Loads data from address |	011DDSSS
+				  |	 src  = register	  |	 in src into dest		 |
+   ---------------+-----------------------+--------------------------+--------------
+   LD dest,imm	  |	 dest = GP register	  |	 Loads an immediate value|	100000DD
+				  |	 imm  = immediate	  |	 into the dest register	 |	CCCCCCCC
+   ---------------+-----------------------+--------------------------+--------------
+   LD (adr),src   |  adr = address        |  Loads the value in src  |  001000DD
+                  |  src = GP register    |  into memory at adr      |  AAAAAAAA
+   ---------------+-----------------------+--------------------------+--------------
+   LD dest,(adr)  |  dest = GP register   |  Loads the value at adr  |  001001DD
+  	 			  |  adr = address        |  into dest               |  AAAAAAAA
+   ---------------+-----------------------+--------------------------+--------------
+   PUSH	src		  |	 src  = register	  |	 Pushes the data in src	 |	100010SS
+				  |						  |	 onto the hardware stack |
+   ---------------+-----------------------+--------------------------+--------------
+   POP dest		  |	 dest = register	  |	 Pops from the hardware	 |	100011DD
+				  |						  |	 stack into dest		 |
+   ---------------+-----------------------+--------------------------+--------------
+   INC reg		  |	 reg  = GP register	  |	 increments reg			 |	100001RR
+   ---------------+-----------------------+--------------------------+--------------
+   DEC reg		  |	 reg  = GP register	  |	 decrements reg			 |	100100RR
+   ---------------+-----------------------+--------------------------+--------------
+   ADD reg		  |	 reg  = GP register	  |	 adds reg to accumulator |	100101RR
+				  |						  |	 and stores result in A	 |
+   ---------------+-----------------------+--------------------------+--------------
+   SUB reg		  |	 reg  = GP register	  |	 subtracts reg from A	 |	100110RR
+				  |						  |	 and stores result in A	 |
+   ---------------+-----------------------+--------------------------+--------------
+   CP reg		  |	 reg  = GP register	  |	 subtracts reg from A	 |	100111RR
+				  |						  |	 and discards results	 |
+   ---------------+-----------------------+--------------------------+--------------
+   AND reg		  |	 reg  = GP register	  |	 ANDs reg with A and	 |	101000RR
+				  |						  |	 stores result in A		 |
+   ---------------+-----------------------+--------------------------+--------------
+   OR reg		  |	 reg  = GP register	  |	 ORs reg with A and	  	 |	101001RR
+				  |						  |	 stores result in A		 |
+   ---------------+-----------------------+--------------------------+--------------
+   XOR reg		  |	 reg  = GP register	  |	 XORs reg with A and	 |	101010RR
+				  |						  |	 stores result in A		 |
+   ---------------+-----------------------+--------------------------+--------------
+   AND imm		  |	 imm  = immediate	  |	 ANDs imm with A and	 |	10101100
+				  |						  |	 stores result in A		 |  CCCCCCCC
+   ---------------+-----------------------+--------------------------+--------------
+   OR imm		  |	 imm  = immediate	  |	 ORs imm with A and	  	 |	10101101
+				  |						  |	 stores result in A		 |	CCCCCCCC
+   ---------------+-----------------------+--------------------------+--------------
+   XOR imm		  |	 imm  = immediate	  |	 XORs imm with A and	 |	10101110
+				  |						  |	 stores result in A		 |	CCCCCCCC
+   ---------------+-----------------------+--------------------------+--------------
+   NEG			  |						  |	 Takes twos complement	 |	10101111
+				  |						  |	 of A and store it in A	 |
+   ---------------+-----------------------+--------------------------+--------------
+   SRL			  |						  |	 Do right logical shift	 |	10110000
+				  |						  |	 of A and store it in A	 |
+   ---------------+-----------------------+--------------------------+--------------
+   SRA			  |						  |	 Do right arithmetc shift|	10110001
+				  |						  |	 on A and store it in A	 |
+   ---------------+-----------------------+--------------------------+--------------
+   SLA			  |						  |	 Do left arithmetic shift|	10110010
+				  |						  |	 on A and store it in A	 |
+   ---------------+-----------------------+--------------------------+--------------
+   NOP			  |						  |	 Has no effect			 |	00000000
+   ---------------+-----------------------+--------------------------+--------------
+   CALL	addr	  |	 addr = address		  |	 Sets PC to addr and	 |	10110100
+				  |						  |	 pushes current PC		 |	AAAAAAAA
+   ---------------+-----------------------+--------------------------+--------------
+   RET			  |						  |	 pops an address from	 |	10110101
+				  |						  |	 stack into PC			 |
+   ---------------+-----------------------+--------------------------+--------------
+   DJNZ addr	  |	 addr = address		  |	 Decrements b and jumps	 |	10110110
+				  |						  |	 to addr if not zero	 |	AAAAAAAA
+   ---------------+-----------------------+--------------------------+--------------
+   JUMP addr	  |	 addr = address		  |	 Sets PC to addr		 |	10110111
+				  |						  |	                    	 |	AAAAAAAA
+   ---------------+-----------------------+--------------------------+--------------
+   JUMP cond,addr |	 addr = address		  |	 Sets PC to addr if cond |	10111CCC
+				  |	 cond = condition	  |	 is true				 |	AAAAAAAA
+
+Notes on above table:
+GP means General Purpose
+2 bit register representation:
+   A = 00
+   B = 01
+   C = 10
+   D = 11
+3 bit register representations:
+   A = 001	   F  = 101
+   B = 010	   PC = 110
+   C = 011	   SP = 111
+   D = 100
+Condition codes:
+	C  = 001
+	NC = 010
+	Z  = 011
+	NZ = 100
+	S  = 101
+	NS = 110

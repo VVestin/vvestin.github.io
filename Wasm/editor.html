@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Weston Assembly</title>
+<script src="lib/ace.js"></script>
+<script src="editor.js"></script>
+<link rel="stylesheet" type="text/css" href="style.css"></link>
+</head>
+<body>
+<form style="display: none" id="formy">
+<input type="file" class="option" id="file-input" onChange="load()" style="display: none"/>
+</form>
+<div id="left-panel">
+<span class="option" onclick="save()"> Save </span>
+<span class="option" onclick="fileInput()"> Load </span>
+<span id="light-button" class="option"onclick="toggleLight()"> Light </span>
+<span class="option" style="font-weight: bold" onclick="window.location = 'http://vvest.in'"> VV </span>
+<pre id="editor">
+ld a,5
+ld b,10
+<!--; Multiplies a and b, stores result in c-->
+; This calculates c = a * b
+ld c,0 <!--; Init c to be 0 (cummulive sum) -->
+MultLoop:
+   sra <!--; Right shift a to check the LSB -->
+   push a <!--; Push a to preserve its value -->
+   jump nc,MultSkipAdd
+      ld a,c
+      add b <!--; Add b to c -->
+      ld c,a
+   MultSkipAdd:
+   jump z,MultEnd <!--; Ends when a is 0 -->
+   ld a,b
+   sla <!--; Multiply b by 2 -->
+   ld b,a
+   pop a <!--; Pop a now that arithmetic is done -->
+jump MultLoop
+
+MultEnd:
+pop a</pre>
+</div>
+
+<div id="menu">
+	<button class="menu-button" style="background-color: var(--wyellow)" onclick="flash()">
+		Flash<br>=&gt;
+	</button>
+	<button class="menu-button" style="background-color: var(--wblue)" onclick="run()" id="run-button">
+		Run<br>&gt;
+	</button>
+	<button class="menu-button" style="background-color: var(--wgreen)" onclick="step()">
+		Step<br>~
+	</button>
+	<button class="menu-button" style="background-color: var(--wred)" onclick="reset()">
+		Reset<br>x
+	</button>
+	<table id="registers">
+		<tr>
+			<th colspan="12">Registers</th>
+		</tr>
+		<tr>
+			<td colspan="3" class = "cell" style="background-color: var(--wgreen)">A</td>
+			<td colspan="3" class = "cell" style="background-color: var(--wgreen)">B</td>
+			<td colspan="3" class = "cell" style="background-color: var(--wgreen)">C</td>
+			<td colspan="3" class = "cell" style="background-color: var(--wgreen)">D</td>
+		</tr>
+		<tr>
+			<td colspan="3" class = "cell" style="background-color: var(--wgreen)" id="A">$00</td>
+			<td colspan="3" class = "cell" style="background-color: var(--wgreen)" id="B">$00</td>
+			<td colspan="3" class = "cell" style="background-color: var(--wgreen)" id="C">$00</td>
+			<td colspan="3" class = "cell" style="background-color: var(--wgreen)" id="D">$00</td>
+		</tr>
+		<tr>
+			<td colspan="4" class = "cell" style="background-color: var(--wred)">F</td>
+			<td colspan="4" class = "cell" style="background-color: var(--wblue)">PC</td>
+			<td colspan="4" class = "cell" style="background-color: var(--wyellow)">SP</td>
+		</tr>
+		<tr>
+			<td colspan="4" class = "cell" style="background-color: var(--wred)" class="reg-val" id="F">$00</td>
+			<td colspan="4" class = "cell" style="background-color: var(--wblue)" class="reg-val" id="PC">$00</td>
+			<td colspan="4" class = "cell" style="background-color: var(--wyellow)" class="reg-val" id="SP">$00</td>
+		</tr>
+	</table>
+</div>
+<table id="help">
+	<tr style="height: calc(1600% / 17)">
+		<td id="help-info" colspan="9"> 
+			<div class="help-coloumn">
+				<span class="data-mov">LD</span> dest,src <br>
+				<div class="description">Loads src into dest. src and dest can sometimes be constants or addresses of locations in memory.</div><br>
+				<span class="data-mov">PUSH</span> src <br>
+				<div class="description">Puts value in src register into memory at SP and then decrements SP.</div><br>
+				<span class="data-mov">POP</span> dest <br>
+				<div class="description">Increments SP and then loads from memory the data at SP into dest register.</div><br>
+				<span class="arithmetic">INC</span> reg <br>
+				<div class="description">Increments reg. Affects sign and zero flags.</div><br>
+				<span class="arithmetic">DEC</span> reg <br>
+				<div class="description">decrements reg. Affects sign and zero flags.</div><br>
+				<span class="arithmetic">ADD</span> reg <br>
+				<div class="description">Adds reg to the accumulator. Affects all flags.</div><br>
+			</div>
+			<div class="help-coloumn" style="border-left: 2px solid white; border-right: 2px solid black;">
+				<span class="arithmetic">SUB</span> reg <br>
+				<div class="description">Subtracts reg from the accumulator. Affects all flags. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div><br>
+				<span class="arithmetic">NEG</span> reg <br>
+				<div class="description">Negates the accumulator using 2s complement. Affects sign and zero flags.</div><br>
+				<span class="bitwise">SRL</span><br>
+				<div class="description">Shifts the accumulator right logically, putting a 0 in the msb. Affects zero flag.</div><br>
+				<span class="bitwise">AND</span> val <br>
+				<div class="description">Bitwise ANDs the accumulator and val. Affects zero flag.</div><br>
+				<span class="bitwise">OR</span> val <br>
+				<div class="description">Bitwise ORs the accumulator and val. Affects zero flag.</div><br>
+				<span class="bitwise">XOR</span> val <br>
+				<div class="description">Bitwise XORs the accumulator and val. Affects zero flag.</div><br>
+		    </div>
+			<div class="help-coloumn" style="border-left: 2px solid white;">
+				<span class="bitwise">SRA</span><br>
+				<div class="description">Shifts the accumulator right arithmetically, preserving the sign bit. Affects sign and zero flags.</div><br>
+				<span class="bitwise">SLA</span><br>
+				<div class="description">Shifts the accumulator left arithmetically. Affects all flags.</div><br>
+				<span class="control">JUMP</span> [cond],addr<br>
+				<div class="description">Sets PC to addr. A flag condition can be specified to jump conditionally. (C,NC,Z,NZ,S,NS)</div><br>
+				<span class="control">DJNZ</span> addr <br>
+				<div class="description">Decrements B and jumps to addr if zero flag is not set.</div><br>
+				<span class="control">CALL</span> addr<br>
+				<div class="description">Pushes the current PC onto the stack and jumps to addr.</div><br>
+				<span class="control">RET</span> <br>
+				<div class="description">Pops from the stack and jumps to the popped address.</div><br>
+			</div>	
+		</td>
+	</tr>
+</table>
+<table id="cpu"></table>
+</body>
+</html>
