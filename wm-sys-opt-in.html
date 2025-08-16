@@ -13,26 +13,73 @@
             background-color: #f8f9fa;
         }
         .container {
-            max-width: 600px;
+            max-width: 700px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 20px;
         }
-        .section {
+        .form-section {
             background: white;
             padding: 30px;
-            margin-bottom: 30px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            text-align: center;
+            margin-bottom: 20px;
         }
         h1 {
             color: #2c3e50;
             margin-bottom: 20px;
+            text-align: center;
         }
-        p {
-            color: #555;
-            font-size: 1.1em;
-            margin-bottom: 30px;
+        h2 {
+            color: #2c3e50;
+            font-size: 1.3em;
+            margin: 25px 0 15px 0;
+        }
+        .service-description {
+            background-color: #e8f4fd;
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+        }
+        .consent-section {
+            border: 2px solid #3498db;
+            padding: 20px;
+            border-radius: 6px;
+            margin: 25px 0;
+        }
+        .checkbox-container {
+            display: flex;
+            align-items: flex-start;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+        }
+        input[type="checkbox"] {
+            margin-right: 12px;
+            margin-top: 4px;
+            transform: scale(1.2);
+        }
+        label {
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .instructions {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 20px;
+            border-radius: 6px;
+            margin: 25px 0;
+        }
+        .date-stamp {
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+            margin: 20px 0;
+        }
+        .legal-text {
+            font-size: 0.9em;
+            color: #666;
+            line-height: 1.5;
         }
         .back-link {
             display: inline-block;
@@ -42,18 +89,116 @@
             text-decoration: none;
             border-radius: 6px;
             transition: background-color 0.3s;
+            margin-top: 20px;
         }
         .back-link:hover {
             background-color: #2980b9;
         }
+        ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        li {
+            margin: 8px 0;
+        }
     </style>
+    <script>
+        function updateDateTime() {
+            const now = new Date();
+            const options = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric'
+            };
+            document.getElementById('datetime').textContent = now.toLocaleDateString('en-US', options);
+        }
+        window.onload = updateDateTime;
+    </script>
 </head>
 <body>
     <div class="container">
-        <div class="section">
-            <h1>WM-Sys SMS Opt-In</h1>
-            <p>Messages are sent to myself and a few trusted friends/family. No public sign-up. All recipients have explicitly agreed.</p>
-            <a href="index.html" class="back-link">Back to Portfolio</a>
+        <div class="form-section">
+            <h1>WM-Sys SMS Service Opt-In</h1>
+            
+            <div class="service-description">
+                <h2>Service Description</h2>
+                <p><strong>WM-Sys</strong> is a personalized SMS reminder system that sends educational content and learning reinforcements to help you retain information you care about. Messages are powered by AI and tailored to your interests.</p>
+            </div>
+
+            <h2>Service Details</h2>
+            <ul>
+                <li><strong>Message Frequency:</strong> Up to daily messages</li>
+                <li><strong>Message Types:</strong> Learning reminders, educational content, retention exercises, and follow-up prompts</li>
+                <li><strong>Service Provider:</strong> Weston Metzler / WM Building Co.</li>
+                <li><strong>Eligibility:</strong> Limited to personal contacts and trusted individuals</li>
+            </ul>
+
+            <div class="consent-section">
+                <h2>Consent and Agreement</h2>
+                <p>By checking the box below, you expressly consent to receive SMS text messages from WM-Sys at the phone number you provide.</p>
+                
+                <div class="checkbox-container">
+                    <input type="checkbox" id="consent" name="consent">
+                    <label for="consent">
+                        <strong>I agree to receive text messages from WM Building Co.</strong>
+                        <br><br>
+                        I understand that:
+                        <ul>
+                            <li>I will receive educational content, learning reminders, and retention exercises via SMS</li>
+                            <li>I may receive up to one text message per day</li>
+                            <li>Message and data rates may apply</li>
+                            <li>I can reply STOP to opt-out at any time</li>
+                            <li>I can reply HELP for assistance</li>
+                            <li>This consent is not required for any purchase</li>
+                        </ul>
+                    </label>
+                </div>
+              <div class="date-stamp">
+                  <strong>Form completed on:</strong> <span id="datetime"></span>
+              </div>
+            </div>
+
+            <div class="instructions">
+                <h2>How to Complete Your Opt-In</h2>
+                <p><strong>To opt-in:</strong></p>
+                <ol>
+                    <li>Check the consent box above</li>
+                    <li>Take a screenshot of this completed form</li>
+                    <li>Email the screenshot to: <strong>weston.metzler@gmail.com</strong></li>
+                    <li>Include your phone number in the email</li>
+                </ol>
+                <p><em>Your opt-in will be processed manually.</em></p>
+            </div>
+
+            <h2>Important Information</h2>
+            <div class="legal-text">
+                <ul>
+                    <li><strong>Opt-Out:</strong> Text STOP to any message to unsubscribe immediately</li>
+                    <li><strong>Help:</strong> Text HELP to any message for assistance</li>
+                    <li><strong>Data Rates:</strong> Message and data rates may apply depending on your carrier plan</li>
+                    <li><strong>Carriers:</strong> Service works with major carriers including Verizon, AT&T, T-Mobile, Sprint, and others</li>
+                    <li><strong>Privacy:</strong> Your phone number will not be shared with third parties</li>
+                    <li><strong>Service Availability:</strong> Service may be discontinued at any time with notice</li>
+                </ul>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <p style="margin-bottom: 20px;">
+                    <a href="#privacy" style="color: #3498db; margin: 0 10px;">Privacy Policy</a> | 
+                    <a href="#terms" style="color: #3498db; margin: 0 10px;">Terms & Conditions</a>
+                </p>
+                <a href="index.html" class="back-link">← Back to Portfolio</a>
+            </div>
+            
+            <div id="privacy" style="margin-top: 40px; padding: 20px; background-color: #f8f9fa; border-radius: 6px;">
+                <h3>Privacy Policy</h3>
+                <p>WM Building Co. will not sell, share, or distribute your phone number to third parties. Your phone number will only be used to send you the WM-Sys educational messages you have consented to receive. You may opt-out at any time by replying STOP to any message.</p>
+            </div>
+            
+            <div id="terms" style="margin-top: 20px; padding: 20px; background-color: #f8f9fa; border-radius: 6px;">
+                <h3>Terms & Conditions</h3>
+                <p>By opting in to WM-Sys text messages, you agree to receive educational content and learning reminders via SMS. Message frequency may vary. Standard message and data rates may apply. Reply STOP to cancel or HELP for support. WM Building Co. reserves the right to terminate this service at any time with notice.</p>
+            </div>
         </div>
     </div>
 </body>
